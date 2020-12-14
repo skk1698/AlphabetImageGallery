@@ -1,11 +1,14 @@
 package com.project.alphabetimagegallery;
 
 import android.os.Bundle;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.project.alphabetimagegallery.adapters.GalleryAdapter;
+import com.project.alphabetimagegallery.databinding.GalleryViewBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +18,10 @@ public class AlphabetImageGallery extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.gallery_view);
-        ImageView selectedImage = findViewById(R.id.selectedImage);
-        RecyclerView recyclerView = findViewById(R.id.image_gallery);
+        GalleryViewBinding galleryViewBinding =
+                DataBindingUtil.setContentView(this, R.layout.gallery_view);
 
+        RecyclerView recyclerView = galleryViewBinding.imageGallery;
         recyclerView.setLayoutManager(new LinearLayoutManager(this,
                                                               LinearLayoutManager.HORIZONTAL,
                                                               false));
@@ -38,7 +41,8 @@ public class AlphabetImageGallery extends AppCompatActivity {
         AlphabetMediaPlayer alphabetMediaPlayer = new AlphabetMediaPlayer(this);
         alphabetMediaPlayer.initMediaPlayer();
 
-        GalleryAdapter myAdapter = new GalleryAdapter(galleryImages, selectedImage, alphabetMediaPlayer);
-        recyclerView.setAdapter(myAdapter);
+        recyclerView.setAdapter(new GalleryAdapter(galleryImages,
+                                                   galleryViewBinding.selectedImage,
+                                                   alphabetMediaPlayer));
     }
 }

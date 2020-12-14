@@ -1,4 +1,4 @@
-package com.project.alphabetimagegallery;
+package com.project.alphabetimagegallery.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,7 +6,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.project.alphabetimagegallery.AlphabetMediaPlayer;
+import com.project.alphabetimagegallery.Image;
+import com.project.alphabetimagegallery.R;
+import com.project.alphabetimagegallery.databinding.GalleryBinding;
 
 import java.util.List;
 
@@ -26,15 +32,17 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     @NonNull
     @Override
     public GalleryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new GalleryViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.gallery, parent, false));
+        return new GalleryViewHolder((GalleryBinding) DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                                                                              R.layout.gallery,
+                                                                              parent,
+                                                                              false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull final GalleryViewHolder holder, final int position) {
         final Image image = images.get(position);
-        holder.galleryImage.setImageResource(image.getImage());
-        holder.galleryImage.setOnClickListener(new View.OnClickListener() {
+        holder.galleryBinding.setImageModel(image);
+        holder.galleryBinding.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedImage.setImageResource(image.getImage());
@@ -49,11 +57,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     }
 
     public class GalleryViewHolder extends RecyclerView.ViewHolder {
-        public ImageView galleryImage;
+        public GalleryBinding galleryBinding;
 
-        public GalleryViewHolder(@NonNull View itemView) {
-            super(itemView);
-            galleryImage = itemView.findViewById(R.id.image);
+        public GalleryViewHolder(@NonNull GalleryBinding galleryBinding) {
+            super(galleryBinding.getRoot());
+            this.galleryBinding = galleryBinding;
         }
     }
 }
